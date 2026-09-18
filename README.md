@@ -21,5 +21,5 @@ Esta versão substitui as provas de demonstração e o `localStorage` por dados 
 `Resultado` pode ser Seleção ou Seleção múltipla. Os pódios são detetados por `Pódio`/`Vitória` ou classificação geral <= 3.
 
 ## Nota
-
+Site ligado ao Vercel
 Ao abrir `index.html` diretamente no computador, a função `/api/provas` não existe. A ligação real ao Notion só funciona quando a pasta for publicada num alojamento que execute a função `api/provas.js`.
