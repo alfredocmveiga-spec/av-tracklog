@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-PT">
 <head>
@@ -75,20 +76,81 @@
     .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
     select, input { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; min-height: 44px; }
     select { min-width: 150px; }
-    .race-list { display: grid; gap: 10px; }
+    .race-list { display: grid; gap: 14px; }
     .race {
-      display: grid; grid-template-columns: 88px 1fr auto; gap: 20px; align-items: center;
-      padding: 19px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-      transition: border-color .2s ease, transform .2s ease;
+      position: relative;
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr) 220px;
+      align-items: stretch;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.18);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
     }
-    .race:hover { border-color: rgba(255,122,26,.65); transform: translateX(4px); }
-    .race-date { color: var(--acid); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
-    .race-title { font-size: 18px; font-weight: 900; letter-spacing: -.035em; margin-bottom: 4px; }
-    .race-sub { color: var(--muted); font-size: 13px; }
-    .race-sub span + span::before { content: "•"; margin: 0 8px; color: var(--orange); }
-    .race-result { text-align: right; }
-    .race-time { font-size: 18px; font-weight: 900; }
-    .race-rank { color: var(--orange); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+    .race::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--orange), var(--acid));
+    }
+    .race--athletics::before { background: linear-gradient(180deg, var(--orange), #ffb36b); }
+    .race--pentathlon::before { background: linear-gradient(180deg, var(--blue), var(--acid)); }
+    .race:hover {
+      border-color: rgba(255,122,26,.5);
+      transform: translateY(-3px);
+      box-shadow: 0 18px 42px rgba(0,0,0,.24);
+    }
+    .race-date-card {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 1px;
+      padding: 18px 14px 18px 18px;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.025);
+      text-align: center;
+    }
+    .race-day { font-size: 34px; line-height: .95; font-weight: 950; letter-spacing: -.07em; color: var(--acid); }
+    .race-month { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .14em; color: var(--ink); }
+    .race-year { font-size: 11px; font-weight: 800; color: var(--muted); }
+    .race-main { min-width: 0; padding: 20px 22px; }
+    .race-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 10px; }
+    .race-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: #dbe4dd;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .race-badge--type { color: var(--blue); border-color: rgba(121,185,255,.24); }
+    .race-badge--podium { color: #10170f; border-color: transparent; background: linear-gradient(135deg, var(--acid), #f3ff9a); }
+    .race-title { font-size: 22px; line-height: 1.08; font-weight: 950; letter-spacing: -.045em; margin-bottom: 12px; }
+    .race-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--muted); font-size: 12px; }
+    .race-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+    .race-meta-icon { color: var(--orange); font-size: 11px; }
+    .race-result {
+      display: grid;
+      align-content: center;
+      justify-items: end;
+      padding: 18px 20px;
+      text-align: right;
+      border-left: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,122,26,.055), rgba(216,255,66,.025));
+    }
+    .race-result-label { margin-bottom: 4px; color: var(--muted); font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .race-time { font-size: 28px; line-height: 1; font-weight: 950; letter-spacing: -.055em; }
+    .race-rank { max-width: 190px; color: var(--orange); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-top: 8px; }
     .demo { display: inline-block; margin-top: 15px; color: var(--muted); font-size: 12px; }
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 70px 0 32px; color: var(--muted); font-size: 12px; }
     footer strong { color: var(--acid); }
@@ -107,9 +169,9 @@
     .sync-chip { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); background:rgba(255,255,255,.04); color:var(--muted); border-radius:100px; padding:10px 13px; font-size:12px; font-weight:800; }
     .sync-dot { width:7px; height:7px; border-radius:50%; background:var(--acid); box-shadow:0 0 0 4px rgba(216,255,66,.09); }
     .sync-chip.error .sync-dot { background:var(--orange); box-shadow:0 0 0 4px rgba(255,122,26,.10); }
-    .race-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-    .race-link { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:999px; padding:5px 9px; color:var(--muted); font-size:11px; font-weight:800; }
-    .race-link:hover { color:var(--ink); border-color:rgba(255,122,26,.55); }
+    .race-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:13px; }
+    .race-link { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:999px; padding:6px 10px; color:var(--muted); font-size:10px; font-weight:900; letter-spacing:.02em; transition: color .2s ease, border-color .2s ease, background .2s ease; }
+    .race-link:hover { color:var(--ink); border-color:rgba(255,122,26,.55); background:rgba(255,122,26,.06); }
 
     @media (max-width: 720px) {
       .shell { width: min(100% - 28px, 580px); }
@@ -123,10 +185,14 @@
       .stat-number { font-size: 32px; }
       .section-head { display: block; }
       .actions { margin-top: 18px; }
-      .race { grid-template-columns: 1fr auto; gap: 10px; padding: 17px; }
-      .race-date { grid-column: 1 / -1; }
-      .race-result { grid-column: 2; grid-row: 2; }
-      .race-main { grid-column: 1; grid-row: 2; }
+      .race { grid-template-columns: 76px minmax(0, 1fr); }
+      .race-date-card { grid-column: 1; grid-row: 1; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 10px 16px 14px; }
+      .race-day { font-size: 28px; }
+      .race-main { grid-column: 2; grid-row: 1; padding: 16px; }
+      .race-title { font-size: 19px; }
+      .race-result { grid-column: 1 / -1; grid-row: 2; justify-items: start; text-align: left; border-left: 0; border-top: 1px solid var(--line); padding: 14px 16px; }
+      .race-time { font-size: 23px; }
+      .race-rank { max-width: none; }
       footer { display: block; padding-top: 52px; }
       footer p + p { margin-top: 8px; }
     }
@@ -184,6 +250,15 @@
       return new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: 'short', year: 'numeric' })
         .format(new Date(value + 'T12:00:00')).replace('.', '');
     };
+    const formatDateParts = (value) => {
+      if (!value) return { day: '—', month: '', year: '' };
+      const date = new Date(value + 'T12:00:00');
+      return {
+        day: new Intl.DateTimeFormat('pt-PT', { day: '2-digit' }).format(date),
+        month: new Intl.DateTimeFormat('pt-PT', { month: 'short' }).format(date).replace('.', ''),
+        year: new Intl.DateTimeFormat('pt-PT', { year: 'numeric' }).format(date)
+      };
+    };
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
     const safeUrl = (value) => {
       try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; }
@@ -216,15 +291,35 @@
           safeUrl(r.strava) ? `<a class="race-link" href="${esc(safeUrl(r.strava))}" target="_blank" rel="noopener noreferrer">Strava ↗</a>` : '',
           safeUrl(r.officialResults) ? `<a class="race-link" href="${esc(safeUrl(r.officialResults))}" target="_blank" rel="noopener noreferrer">Resultados ↗</a>` : ''
         ].filter(Boolean).join('');
-        const subtype = r.subtype ? `<span>${esc(r.subtype)}</span>` : '';
-        return `<article class="race">
-          <div class="race-date">${formatDate(r.date)}</div>
+        const date = formatDateParts(r.date);
+        const typeClass = /atletismo/i.test(r.type || '') ? 'race--athletics' : /pentatlo/i.test(r.type || '') ? 'race--pentathlon' : '';
+        const distance = Number.isFinite(r.distance) ? `${String(r.distance).replace('.', ',')} km` : '';
+        const badges = [
+          r.type ? `<span class="race-badge">${esc(r.type)}</span>` : '',
+          r.subtype ? `<span class="race-badge race-badge--type">${esc(r.subtype)}</span>` : '',
+          r.isPodium ? `<span class="race-badge race-badge--podium">Pódio</span>` : ''
+        ].filter(Boolean).join('');
+        const meta = [
+          r.location ? `<span class="race-meta-item"><span class="race-meta-icon">●</span>${esc(r.location)}</span>` : '',
+          distance ? `<span class="race-meta-item"><span class="race-meta-icon">↔</span>${esc(distance)}</span>` : ''
+        ].filter(Boolean).join('');
+        return `<article class="race ${typeClass}">
+          <div class="race-date-card" aria-label="${esc(formatDate(r.date))}">
+            <span class="race-day">${esc(date.day)}</span>
+            <span class="race-month">${esc(date.month)}</span>
+            <span class="race-year">${esc(date.year)}</span>
+          </div>
           <div class="race-main">
+            <div class="race-badges">${badges}</div>
             <div class="race-title">${esc(r.name)}</div>
-            <div class="race-sub"><span>${esc(r.type || '—')}</span>${subtype}<span>${esc(r.location || '—')}</span></div>
+            ${meta ? `<div class="race-meta">${meta}</div>` : ''}
             ${links ? `<div class="race-links">${links}</div>` : ''}
           </div>
-          <div class="race-result"><div class="race-time">${esc(r.time || '—')}</div><div class="race-rank">${esc(r.rank || '—')}</div></div>
+          <div class="race-result">
+            <div class="race-result-label">Tempo / resultado</div>
+            <div class="race-time">${esc(r.time || '—')}</div>
+            <div class="race-rank">${esc(r.rank || '—')}</div>
+          </div>
         </article>`;
       }).join('') : '<div class="empty">Ainda não existem provas neste filtro.</div>';
 
