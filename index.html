@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt-PT">
 <head>
@@ -135,6 +134,7 @@
     }
     .race-badge--type { color: var(--blue); border-color: rgba(121,185,255,.24); }
     .race-badge--podium { color: #10170f; border-color: transparent; background: linear-gradient(135deg, var(--acid), #f3ff9a); }
+    .race-badge--victory { color: #1b1209; border-color: transparent; background: linear-gradient(135deg, #ff9c52, var(--orange)); }
     .race-title { font-size: 22px; line-height: 1.08; font-weight: 950; letter-spacing: -.045em; margin-bottom: 12px; }
     .race-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--muted); font-size: 12px; }
     .race-meta-item { display: inline-flex; align-items: center; gap: 6px; }
@@ -150,7 +150,8 @@
     }
     .race-result-label { margin-bottom: 4px; color: var(--muted); font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
     .race-time { font-size: 28px; line-height: 1; font-weight: 950; letter-spacing: -.055em; }
-    .race-rank { max-width: 190px; color: var(--orange); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-top: 8px; }
+    .race-rank { max-width: 210px; color: var(--orange); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-top: 8px; }
+    .race-rank--placement { color: var(--acid); }
     .demo { display: inline-block; margin-top: 15px; color: var(--muted); font-size: 12px; }
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 70px 0 32px; color: var(--muted); font-size: 12px; }
     footer strong { color: var(--acid); }
@@ -264,6 +265,10 @@
       try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; }
       catch { return ''; }
     };
+    const ordinalPt = (value, label) => {
+      if (!Number.isFinite(value)) return '';
+      return `${value}.º ${label}`;
+    };
 
     function setSync(message, error = false) {
       const el = $('#sync-status');
@@ -294,15 +299,32 @@
         const date = formatDateParts(r.date);
         const typeClass = /atletismo/i.test(r.type || '') ? 'race--athletics' : /pentatlo/i.test(r.type || '') ? 'race--pentathlon' : '';
         const distance = Number.isFinite(r.distance) ? `${String(r.distance).replace('.', ',')} km` : '';
+        const resultTags = Array.isArray(r.results) ? r.results : [];
+        const isVictory = resultTags.some(x => /vitória|vitoria/i.test(x));
+        const isPodium = r.isPodium || resultTags.some(x => /pódio|podio/i.test(x));
         const badges = [
           r.type ? `<span class="race-badge">${esc(r.type)}</span>` : '',
           r.subtype ? `<span class="race-badge race-badge--type">${esc(r.subtype)}</span>` : '',
-          r.isPodium ? `<span class="race-badge race-badge--podium">Pódio</span>` : ''
+          isVictory ? `<span class="race-badge race-badge--victory">Vitória</span>` : (isPodium ? `<span class="race-badge race-badge--podium">Pódio</span>` : '')
         ].filter(Boolean).join('');
         const meta = [
           r.location ? `<span class="race-meta-item"><span class="race-meta-icon">●</span>${esc(r.location)}</span>` : '',
           distance ? `<span class="race-meta-item"><span class="race-meta-icon">↔</span>${esc(distance)}</span>` : ''
         ].filter(Boolean).join('');
+        const placementParts = [
+          ordinalPt(r.generalRank, 'geral'),
+          ordinalPt(r.categoryRank, 'escalão')
+        ].filter(Boolean);
+        let displayRank = placementParts.join(' · ');
+        let placementClass = placementParts.length ? ' race-rank--placement' : '';
+        if (!displayRank) {
+          if (isVictory) displayRank = 'Vitória';
+          else if (isPodium) displayRank = 'Pódio';
+          else {
+            const meaningfulResults = resultTags.filter(x => !/participação|participacao|finisher/i.test(x));
+            displayRank = meaningfulResults.join(' · ');
+          }
+        }
         return `<article class="race ${typeClass}">
           <div class="race-date-card" aria-label="${esc(formatDate(r.date))}">
             <span class="race-day">${esc(date.day)}</span>
@@ -316,9 +338,9 @@
             ${links ? `<div class="race-links">${links}</div>` : ''}
           </div>
           <div class="race-result">
-            <div class="race-result-label">Tempo / resultado</div>
+            <div class="race-result-label">Tempo / classificação</div>
             <div class="race-time">${esc(r.time || '—')}</div>
-            <div class="race-rank">${esc(r.rank || '—')}</div>
+            ${displayRank ? `<div class="race-rank${placementClass}">${esc(displayRank)}</div>` : ''}
           </div>
         </article>`;
       }).join('') : '<div class="empty">Ainda não existem provas neste filtro.</div>';
