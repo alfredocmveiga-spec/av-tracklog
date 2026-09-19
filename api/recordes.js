@@ -1,6 +1,8 @@
 export default async function handler(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "Método não permitido" });
+    return res.status(405).json({
+      error: "Método não permitido",
+    });
   }
 
   const NOTION_TOKEN = process.env.NOTION_TOKEN;
@@ -22,14 +24,7 @@ export default async function handler(req, res) {
           "Notion-Version": "2022-06-28",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          filter: {
-            property: "Ativo",
-            checkbox: {
-              equals: true,
-            },
-          },
-        }),
+        body: JSON.stringify({}),
       }
     );
 
@@ -37,6 +32,7 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       console.error(data);
+
       return res.status(response.status).json({
         error: "Erro ao consultar o Notion",
         detalhe: data,
