@@ -31,8 +31,6 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(data);
-
       return res.status(response.status).json({
         error: "Erro ao consultar o Notion",
         detalhe: data,
@@ -43,25 +41,49 @@ export default async function handler(req, res) {
       if (!property) return "";
 
       if (property.title) {
-        return property.title
-          .map((item) => item.plain_text)
-          .join("");
+        return property.title.map((item) => item.plain_text).join("");
       }
 
       if (property.rich_text) {
-        return property.rich_text
-          .map((item) => item.plain_text)
-          .join("");
+        return property.rich_text.map((item) => item.plain_text).join("");
       }
 
       return "";
+    }
+
+    function normalizarDistancia(distancia) {
+      const valor = distancia
+        .toLowerCase()
+        .replace(/\s/g, "")
+        .replace(/-/g, "");
+
+      if (valor === "5km") return "5 km";
+      if (valor === "10km") return "10 km";
+
+      if (
+        valor === "meiamaratona" ||
+        valor === "21km" ||
+        valor === "21.1km"
+      ) {
+        return "Meia Maratona";
+      }
+
+      if (
+        valor === "maratona" ||
+        valor === "42km" ||
+        valor === "42.195km"
+      ) {
+        return "Maratona";
+      }
+
+      return distancia;
     }
 
     const recordes = data.results.map((page) => {
       const p = page.properties;
 
       return {
-        distancia: getText(p["Distância"]),
+        distancia: normalizarDistancia(getText(p["Distância"])),
         marca: getText(p["Marca"]),
         data: p["Data"]?.date?.start || null,
         contexto: p["Contexto"]?.select?.name || null,
@@ -85,8 +107,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json(recordes);
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
       error: "Erro interno",
     });
