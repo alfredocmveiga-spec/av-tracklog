@@ -1,6 +1,6 @@
 
- 
-   <!doctype html>
+
+       <!doctype html>
 <html lang="pt-PT">
 <head>
   <meta charset="utf-8" />
@@ -137,7 +137,7 @@
     .goal-arrow { color: var(--orange); font-size: 24px; font-weight: 900; padding-bottom: 3px; }
     .goal-gap { margin-top: 22px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
     .goal-gap strong { color: var(--orange); font-weight: 950; }
-    #recordes, #provas, #sobre { scroll-margin-top: 100px; }
+    #recordes, #metas, #proximas, #provas, #sobre { scroll-margin-top: 100px; }
     .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
     h2 { font-size: 34px; line-height: 1; letter-spacing: -.06em; margin: 0; text-transform: uppercase; }
     .section-note { color: var(--muted); font-size: 13px; margin: 7px 0 0; }
@@ -398,12 +398,12 @@
     }
     .stat-number { font-size: 42px; }
 
-    .records-section, .goals-section, #provas {
+    .records-section, .goals-section, .upcoming-section, #provas {
       position: relative;
       padding-top: 34px;
       border-top: 1px solid rgba(236,246,237,.11);
     }
-    .records-section, .goals-section { margin-bottom: 82px; }
+    .records-section, .goals-section, .upcoming-section { margin-bottom: 82px; }
     #provas { padding-bottom: 6px; }
     .section-head { margin-bottom: 28px; }
     .section-kicker {
@@ -460,6 +460,65 @@
     .goal-value { font-size: clamp(30px, 4vw, 44px); }
     .goal-gap { color: #b9c2bc; }
 
+    .upcoming-list { display: grid; gap: 16px; }
+    .upcoming-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) 170px;
+      overflow: hidden;
+      min-height: 156px;
+      border: 1px solid rgba(236,246,237,.16);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(121,185,255,.075), rgba(216,255,66,.035) 52%, rgba(255,122,26,.055));
+      box-shadow: 0 18px 46px rgba(0,0,0,.22);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .upcoming-card::before {
+      content: "";
+      position: absolute; inset: 0 auto 0 0; width: 4px;
+      background: linear-gradient(180deg, var(--blue), var(--acid), var(--orange));
+    }
+    .upcoming-card:hover { transform: translateY(-3px); border-color: rgba(216,255,66,.32); box-shadow: 0 22px 54px rgba(0,0,0,.28); }
+    .upcoming-date {
+      display: grid; place-items: center; align-content: center; gap: 2px;
+      padding: 20px 14px 20px 18px; text-align: center;
+      border-right: 1px solid var(--line); background: rgba(255,255,255,.024);
+    }
+    .upcoming-day { color: var(--acid); font-size: 38px; line-height: .92; font-weight: 950; letter-spacing: -.07em; }
+    .upcoming-month { color: var(--ink); font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .upcoming-year { color: var(--muted); font-size: 11px; font-weight: 800; }
+    .upcoming-main { min-width: 0; padding: 24px; align-self: center; }
+    .upcoming-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 11px; }
+    .upcoming-badge {
+      display: inline-flex; align-items: center; min-height: 26px; padding: 6px 10px;
+      border: 1px solid rgba(121,185,255,.24); border-radius: 999px;
+      background: rgba(121,185,255,.055); color: var(--blue);
+      font-size: 9px; line-height: 1; font-weight: 950; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .upcoming-badge--confirmed { border-color: rgba(216,255,66,.24); background: rgba(216,255,66,.07); color: var(--acid); }
+    .upcoming-badge--planned { border-color: rgba(255,122,26,.25); background: rgba(255,122,26,.07); color: var(--orange); }
+    .upcoming-title { font-size: clamp(22px, 3vw, 30px); line-height: 1.05; font-weight: 950; letter-spacing: -.05em; }
+    .upcoming-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 13px; color: var(--muted); font-size: 12px; }
+    .upcoming-meta span { display: inline-flex; align-items: center; gap: 6px; }
+    .upcoming-meta i { color: var(--orange); font-style: normal; font-size: 10px; }
+    .upcoming-countdown {
+      display: grid; align-content: center; justify-items: end; padding: 22px; text-align: right;
+      border-left: 1px solid var(--line); background: rgba(4,9,6,.18);
+    }
+    .upcoming-count-label { color: var(--muted); font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+    .upcoming-count-value { margin-top: 5px; color: var(--orange); font-size: 25px; line-height: 1; font-weight: 950; letter-spacing: -.05em; }
+    .upcoming-empty { padding: 34px; border: 1px dashed var(--line); border-radius: 20px; color: var(--muted); background: rgba(255,255,255,.018); }
+
+    @media (max-width: 720px) {
+      .upcoming-card { grid-template-columns: 76px minmax(0, 1fr); min-height: 0; border-radius: 20px; }
+      .upcoming-date { grid-column: 1; grid-row: 1; padding: 16px 10px 16px 14px; }
+      .upcoming-day { font-size: 29px; }
+      .upcoming-main { grid-column: 2; grid-row: 1; padding: 17px; }
+      .upcoming-title { font-size: 20px; }
+      .upcoming-countdown { grid-column: 1 / -1; grid-row: 2; justify-items: start; text-align: left; border-left: 0; border-top: 1px solid var(--line); padding: 13px 16px; }
+      .upcoming-count-value { font-size: 20px; }
+    }
+
     .filters {
       margin-bottom: 20px;
       padding: 10px;
@@ -513,8 +572,8 @@
       .hero-main::before { left: -12px; height: 54px; }
       h1 { font-size: clamp(48px, 16vw, 72px); }
       .stats { margin-bottom: 60px; }
-      .records-section, .goals-section { margin-bottom: 60px; }
-      .records-section, .goals-section, #provas { padding-top: 28px; }
+      .records-section, .goals-section, .upcoming-section { margin-bottom: 60px; }
+      .records-section, .goals-section, .upcoming-section, #provas { padding-top: 28px; }
       .record-card { min-height: 152px; padding: 18px; }
       .record-mark { font-size: 34px; }
       .record-card::after { font-size: 48px; }
@@ -551,7 +610,7 @@
 <body>
   <header class="shell topbar">
     <a class="mark" href="#top" aria-label="Início"><span class="mark-dot" aria-hidden="true"></span>AV / TRACKLOG</a>
-    <nav aria-label="Navegação principal"><a href="#recordes">Recordes</a><a href="#metas">Metas</a><a href="#provas">Provas</a><a href="#sobre">Sobre</a><a href="#contacto">Instagram ↗</a></nav>
+    <nav aria-label="Navegação principal"><a href="#recordes">Recordes</a><a href="#metas">Metas</a><a href="#proximas">Próximas</a><a href="#provas">Provas</a><a href="#sobre">Sobre</a><a href="#contacto">Instagram ↗</a></nav>
   </header>
 
   <main id="top">
@@ -643,6 +702,19 @@
       </div>
     </section>
 
+    <section class="shell upcoming-section" id="proximas">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Calendário · próximos desafios</div>
+          <h2>Próximas provas</h2>
+          <p class="section-note">As competições que já estão no horizonte, diretamente do Notion.</p>
+        </div>
+      </div>
+      <div class="upcoming-list" id="upcoming-list">
+        <div class="upcoming-empty">A carregar próximas provas do Notion…</div>
+      </div>
+    </section>
+
     <section class="shell" id="provas">
       <div class="section-head">
         <div><div class="section-kicker">Histórico · competição</div><h2>Diário de provas</h2><p class="section-note">Cada linha é mais um capítulo.</p></div>
@@ -693,6 +765,27 @@
       if (!Number.isFinite(value)) return '';
       return `${value}.º ${label}`;
     };
+    const localISODate = () => {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+    const raceStatus = (r) => String(r.status ?? r.estado ?? r.state ?? '').trim();
+    const isCancelledRace = (r) => /cancelad/i.test(raceStatus(r));
+    const isCompletedRace = (r) => /realizad|conclu[ií]d|terminad/i.test(raceStatus(r));
+    const isUpcomingRace = (r) => {
+      if (!r?.date || isCancelledRace(r) || isCompletedRace(r)) return false;
+      return r.date >= localISODate();
+    };
+    const historicRaces = () => races.filter(r => !isUpcomingRace(r) && !isCancelledRace(r));
+    const daysUntil = (value) => {
+      if (!value) return null;
+      const target = new Date(value + 'T12:00:00');
+      const today = new Date(localISODate() + 'T12:00:00');
+      return Math.round((target - today) / 86400000);
+    };
 
     function setSync(message, error = false) {
       const el = $('#sync-status');
@@ -702,7 +795,7 @@
 
     function refreshYears() {
       const current = $('#year-filter').value;
-      const years = [...new Set(races.map(r => (r.date || '').slice(0,4)).filter(Boolean))].sort().reverse();
+      const years = [...new Set(historicRaces().map(r => (r.date || '').slice(0,4)).filter(Boolean))].sort().reverse();
       $('#year-filter').innerHTML = '<option value="all">Todos os anos</option>' + years.map(y => `<option>${y}</option>`).join('');
       $('#year-filter').value = years.includes(current) ? current : 'all';
     }
@@ -791,11 +884,60 @@
       }
     }
 
+    function renderUpcoming() {
+      const list = $('#upcoming-list');
+      if (!list) return;
+
+      const upcoming = races
+        .filter(isUpcomingRace)
+        .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+      if (!upcoming.length) {
+        list.innerHTML = '<div class="upcoming-empty">Ainda não existem próximas provas registadas.</div>';
+        return;
+      }
+
+      list.innerHTML = upcoming.map(r => {
+        const date = formatDateParts(r.date);
+        const status = raceStatus(r);
+        const statusLabel = status || 'Próxima prova';
+        const statusClass = /confirmad/i.test(status) ? ' upcoming-badge--confirmed' : /planead/i.test(status) ? ' upcoming-badge--planned' : '';
+        const distance = Number.isFinite(r.distance) ? `${String(r.distance).replace('.', ',')} km` : '';
+        const metaItems = [
+          r.type ? `<span><i>●</i>${esc(r.type)}</span>` : '',
+          r.subtype ? `<span><i>◆</i>${esc(r.subtype)}</span>` : '',
+          r.location ? `<span><i>⌖</i>${esc(r.location)}</span>` : '',
+          distance ? `<span><i>↔</i>${esc(distance)}</span>` : ''
+        ].filter(Boolean).join('');
+        const days = daysUntil(r.date);
+        const countdown = days === 0 ? 'Hoje' : days === 1 ? 'Amanhã' : Number.isFinite(days) ? `Faltam ${days} dias` : 'Em breve';
+
+        return `<article class="upcoming-card">
+          <div class="upcoming-date" aria-label="${esc(formatDate(r.date))}">
+            <span class="upcoming-day">${esc(date.day)}</span>
+            <span class="upcoming-month">${esc(date.month)}</span>
+            <span class="upcoming-year">${esc(date.year)}</span>
+          </div>
+          <div class="upcoming-main">
+            <div class="upcoming-badges"><span class="upcoming-badge${statusClass}">${esc(statusLabel)}</span></div>
+            <div class="upcoming-title">${esc(r.name || 'Prova')}</div>
+            ${metaItems ? `<div class="upcoming-meta">${metaItems}</div>` : ''}
+          </div>
+          <div class="upcoming-countdown">
+            <div class="upcoming-count-label">Contagem decrescente</div>
+            <div class="upcoming-count-value">${esc(countdown)}</div>
+          </div>
+        </article>`;
+      }).join('');
+    }
+
     function render() {
+      renderUpcoming();
       refreshYears();
+      const history = historicRaces();
       const type = $('#type-filter').value;
       const year = $('#year-filter').value;
-      const filtered = races
+      const filtered = history
         .filter(r => (type === 'all' || r.type === type) && (year === 'all' || (r.date || '').startsWith(year)))
         .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
 
@@ -853,10 +995,10 @@
         </article>`;
       }).join('') : '<div class="empty">Ainda não existem provas neste filtro.</div>';
 
-      const podiums = races.filter(r => r.isPodium).length;
-      const years = new Set(races.map(r => (r.date || '').slice(0,4)).filter(Boolean));
-      const modalities = new Set(races.map(r => r.type).filter(Boolean));
-      $('#stat-races').textContent = races.length;
+      const podiums = history.filter(r => r.isPodium).length;
+      const years = new Set(history.map(r => (r.date || '').slice(0,4)).filter(Boolean));
+      const modalities = new Set(history.map(r => r.type).filter(Boolean));
+      $('#stat-races').textContent = history.length;
       $('#stat-podiums').textContent = podiums;
       $('#stat-modalities').textContent = modalities.size || '—';
       $('#stat-years').textContent = years.size || '—';
